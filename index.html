@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>מרכז הידע — ClinicFlow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css" />
+  <style>
+    :root {
+      --primary: #0d47a1;
+      --teal: #00838f;
+      --bg: #f5f7f9;
+      --surface: #ffffff;
+      --text: #1a2332;
+      --muted: #6b7c93;
+      --border: #e1e6ec;
+      --sidebar-width: 280px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Heebo', sans-serif !important;
+      direction: rtl;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      overflow-x: hidden;
+    }
+
+    /* ── Top bar ── */
+    .top-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 56px;
+      background: #1a2332;
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      z-index: 200;
+    }
+    .top-bar-brand {
+      position: absolute;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .top-bar-logo {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #0d47a1, #00838f);
+      flex-shrink: 0;
+    }
+    .top-bar-name {
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+    .top-bar-divider {
+      display: inline-block;
+      width: 1px;
+      height: 16px;
+      background: rgba(255,255,255,0.2);
+      margin: 0 8px;
+      vertical-align: middle;
+    }
+    .top-bar-subtitle {
+      color: #7a9db8;
+      font-size: 0.82rem;
+      font-weight: 400;
+    }
+    .top-bar-badge { display: none; }
+    .top-bar-sep { display: none; }
+    .top-bar-links {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 2px;
+      white-space: nowrap;
+      position: relative;
+      top: -12px;
+    }
+    .top-bar-links a {
+      color: #7a9db8;
+      text-decoration: none;
+      font-size: 0.8rem;
+      padding: 5px 10px;
+      border-radius: 6px;
+      transition: all 0.15s;
+    }
+    .top-bar-links a:hover { color: #fff; background: rgba(255,255,255,0.08); }
+    .top-bar-links .btn-site {
+      background: linear-gradient(135deg, #0d47a1, #00838f);
+      color: #fff !important;
+      font-weight: 600;
+      padding: 5px 14px;
+    }
+    .top-bar-links .btn-site:hover { opacity: 0.88; background: linear-gradient(135deg, #0d47a1, #00838f) !important; }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      position: fixed !important;
+      right: 0 !important;
+      left: auto !important;
+      top: 56px !important;
+      bottom: 0 !important;
+      width: var(--sidebar-width) !important;
+      overflow-y: auto !important;
+      border-left: 1px solid var(--border) !important;
+      border-right: none !important;
+      background: var(--surface) !important;
+      padding: 20px 0 40px !important;
+      z-index: 150 !important;
+    }
+    .sidebar-nav { padding: 0 16px; }
+    .sidebar-nav ul { padding: 0; list-style: none; margin: 0; }
+    .sidebar-nav ul li { margin: 1px 0; }
+
+    /* Top-level page links */
+    .sidebar-nav ul li a {
+      display: block;
+      padding: 6px 12px;
+      border-radius: 8px;
+      color: var(--muted);
+      font-size: 0.875rem;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .sidebar-nav ul li a:hover { color: var(--primary); background: #f0f4ff; }
+    .sidebar-nav ul li.active > a,
+    .sidebar-nav ul li > p.active > a { color: var(--primary) !important; background: #e8f0fe !important; font-weight: 600; }
+
+    /* Section headings (bold groups like "האתר", "האפליקציה") */
+    .sidebar-nav > ul > li > p,
+    .sidebar-nav > ul > li > strong {
+      display: block;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      padding: 16px 12px 4px;
+      margin: 0;
+    }
+
+    /* Sub-items hidden — shown in the section tabs column instead */
+    .sidebar-nav ul ul { display: none !important; }
+
+    /* ── Content ── */
+    .content {
+      position: fixed !important;
+      top: 56px !important;
+      left: 0 !important;
+      right: var(--sidebar-width) !important;
+      bottom: 0 !important;
+      overflow-y: auto !important;
+      overflow-x: visible !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      z-index: 50 !important;
+    }
+    .markdown-section {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 40px 32px 100px !important;
+    }
+
+    /* ── Typography ── */
+    .markdown-section h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+    .markdown-section h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text);
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 8px;
+      margin-top: 40px;
+    }
+    .markdown-section h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-top: 28px;
+    }
+    .markdown-section p { color: #3a4a5c; line-height: 1.75; }
+    .markdown-section a { color: var(--primary); }
+    .markdown-section strong { color: var(--text); }
+
+    /* ── Code ── */
+    .markdown-section code {
+      background: #f0f4ff;
+      color: var(--primary);
+      border-radius: 5px;
+      padding: 1px 6px;
+      font-size: 0.87em;
+    }
+
+    /* ── Blockquote / tip ── */
+    .markdown-section blockquote {
+      border-right: 4px solid var(--teal);
+      border-left: none;
+      background: #f0fafb;
+      padding: 12px 16px;
+      border-radius: 0 10px 10px 0;
+      margin: 20px 0;
+      color: #1a4a4f;
+    }
+
+    /* ── Tables ── */
+    .markdown-section table { width: 100%; border-collapse: collapse; }
+    .markdown-section th {
+      background: var(--primary);
+      color: #fff;
+      padding: 10px 14px;
+      font-weight: 600;
+      text-align: right;
+    }
+    .markdown-section td { padding: 9px 14px; border-bottom: 1px solid var(--border); }
+    .markdown-section tr:hover td { background: #f9fafc; }
+
+    /* ── Search ── */
+    .search input {
+      border-radius: 10px !important;
+      border: 1px solid var(--border) !important;
+      font-family: 'Heebo', sans-serif !important;
+      direction: rtl;
+      padding: 8px 14px !important;
+      width: calc(100% - 16px) !important;
+      margin: 0 8px 12px !important;
+    }
+
+    /* ── Pagination ── */
+    .docs-pagination {
+      display: flex;
+      justify-content: space-between;
+      padding: 32px 0 0;
+      margin-top: 40px;
+      border-top: 1px solid var(--border);
+    }
+    .docs-pagination a {
+      display: inline-block;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 16px;
+      color: var(--primary);
+      font-size: 1rem;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .docs-pagination a:hover { border-color: var(--primary); background: #f0f4ff; }
+    .docs-pagination .spacer { flex: 1; }
+
+    /* ── Footer ── */
+    /* ── Footer ── */
+    .docs-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(100%);
+      transition: opacity 0.3s, transform 0.3s;
+      background: #1a2332;
+      padding: 16px 24px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+    }
+    .docs-footer-links {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      font-size: 0.78rem;
+    }
+    .docs-footer-links a {
+      color: #b8d4e6;
+      text-decoration: none;
+      padding: 3px 8px;
+      border-radius: 5px;
+      transition: color 0.15s, background 0.15s;
+    }
+    .docs-footer-links a:hover { color: #fff; background: rgba(255,255,255,0.08); }
+    .docs-footer-copy {
+      color: #6b8aaa;
+      font-size: 0.78rem;
+      padding: 3px 8px;
+    }
+    .docs-footer.visible {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateY(0);
+    }
+
+    /* ── Section drum / carousel ── */
+    :root { --section-tabs-width: 180px; --drum-item-h: 36px; }
+
+    .section-tabs {
+      position: fixed;
+      top: 56px;
+      bottom: 0;
+      right: var(--sidebar-width);
+      width: var(--section-tabs-width);
+      background: transparent;
+      border: none;
+      z-index: 40;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      transition: opacity 0.2s, width 0.2s;
+    }
+    .section-tabs.hidden { opacity: 0; pointer-events: none; width: 0; }
+
+    /* The drum track — all items positioned absolutely */
+    .drum-track {
+      position: relative;
+      width: 100%;
+      height: calc(var(--drum-item-h) * 5);
+      overflow: hidden;
+      /* Fade mask top & bottom */
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 28%, black 72%, transparent 100%);
+      mask-image: linear-gradient(to bottom, transparent 0%, black 28%, black 72%, transparent 100%);
+    }
+
+    .section-tab {
+      position: absolute;
+      left: 0; right: 0;
+      height: var(--drum-item-h);
+      display: flex;
+      align-items: center;
+      padding: 0 12px 0 10px;
+      gap: 8px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      font-family: 'Heebo', sans-serif;
+      direction: rtl;
+      text-align: right;
+      white-space: nowrap;
+      cursor: pointer;
+      border: none;
+      background: none;
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1),
+                  opacity 0.35s ease,
+                  color 0.2s,
+                  font-size 0.35s ease;
+    }
+    /* Line indicator */
+    .section-tab::before {
+      content: '';
+      flex-shrink: 0;
+      width: 2px;
+      height: 14px;
+      border-radius: 2px;
+      background: currentColor;
+      opacity: 0.25;
+      transition: opacity 0.2s, height 0.2s;
+    }
+    .section-tab[data-dist="0"] { color: var(--primary); font-weight: 700; font-size: 0.8rem; }
+    .section-tab[data-dist="0"]::before { opacity: 1; height: 20px; }
+    .section-tab[data-dist="1"] { color: var(--text); opacity: 0.45; }
+    .section-tab[data-dist="2"] { color: var(--muted); opacity: 0.18; font-size: 0.68rem; }
+    .section-tab[data-dist="3"] { opacity: 0; pointer-events: none; }
+    .section-tab:hover[data-dist="1"],
+    .section-tab:hover[data-dist="2"] { opacity: 0.7; color: var(--primary); }
+
+    /* Content shifts to make room */
+    .content { right: calc(var(--sidebar-width) + var(--section-tabs-width)) !important; }
+    body.no-section-tabs .content { right: var(--sidebar-width) !important; }
+
+    .sidebar-toggle,
+    .sidebar-toggle-button { display: none !important; }
+
+    @media (max-width: 768px) {
+      .sidebar-toggle,
+      .sidebar-toggle-button { display: flex !important; }
+      .sidebar { right: calc(-1 * var(--sidebar-width)) !important; transition: right 0.3s; }
+      .sidebar.open { right: 0 !important; }
+      .content { left: 0 !important; right: 0 !important; top: 56px !important; }
+      .section-tabs { display: none !important; }
+      .top-bar-badge { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top bar -->
+  <header class="top-bar">
+    <a href="https://clinic-flow.co.il" target="_blank" class="top-bar-brand">
+      <div class="top-bar-logo"></div>
+      <span class="top-bar-name">ClinicFlow</span>
+      <span class="top-bar-divider"></span>
+      <span class="top-bar-subtitle">מרכז מידע</span>
+    </a>
+    <nav class="top-bar-links">
+      <a href="https://clinic-flow.co.il/#/features" target="_blank">יכולות</a>
+      <a href="https://clinic-flow.co.il/#/pricing" target="_blank">מחירים</a>
+      <a href="https://clinic-flow.co.il/#/terms" target="_blank">תנאי שימוש</a>
+      <a href="https://clinic-flow.co.il/#/privacy" target="_blank">פרטיות</a>
+      <a href="https://clinic-flow.co.il/#/refund" target="_blank">החזרים</a>
+      <a href="https://clinic-flow.co.il/#/disclaimer" target="_blank">אחריות</a>
+      <a href="https://clinic-flow.co.il/#/dashboard" target="_blank" class="btn-site">כניסה לחשבון ←</a>
+    </nav>
+  </header>
+
+  <!-- Section scrollspy tabs -->
+  <nav id="section-tabs" class="section-tabs hidden"></nav>
+
+  <div id="app"></div>
+
+  <script>
+    window.$docsify = {
+      name: '',
+      repo: '',
+      homepage: 'index.md',
+      loadSidebar: true,
+      subMaxLevel: 2,
+      search: {
+        placeholder: 'חיפוש...',
+        noData: 'לא נמצאו תוצאות',
+        depth: 3,
+      },
+      alias: {
+        '/.*/_sidebar.md': '/_sidebar.md',
+      },
+      plugins: [
+        function(hook) {
+          // Ordered list of all pages matching the sidebar
+          var pages = [
+            '#/',
+            '#/getting-started',
+            '#/scenarios',
+            '#/website/auth',
+            '#/website/billing',
+            '#/website/dashboard',
+            '#/app/installation',
+            '#/app/home',
+            '#/app/patients',
+            '#/app/visit-editor',
+            '#/app/calendar',
+            '#/app/documents',
+            '#/app/finance',
+            '#/app/opinions',
+            '#/app/journal',
+            '#/app/medications',
+            '#/app/backup-restore',
+            '#/app/settings',
+          ];
+
+          var savedSidebarScroll = 0;
+
+
+          hook.beforeEach(function(content) {
+            var sidebar = document.querySelector('.sidebar');
+            if (sidebar) savedSidebarScroll = sidebar.scrollTop;
+            return content;
+          });
+
+          var scrollSpyCleanup = null;
+
+          function buildSectionTabs() {
+            var tabsEl = document.getElementById('section-tabs');
+            var contentEl = document.querySelector('.content');
+            if (!tabsEl || !contentEl) return;
+
+            var headings = Array.from(document.querySelectorAll('.markdown-section h2'));
+
+            if (headings.length < 2) {
+              tabsEl.classList.add('hidden');
+              tabsEl.innerHTML = '';
+              document.body.classList.add('no-section-tabs');
+              if (scrollSpyCleanup) { scrollSpyCleanup(); scrollSpyCleanup = null; }
+              return;
+            }
+            document.body.classList.remove('no-section-tabs');
+
+            // Build drum track
+            tabsEl.classList.remove('hidden');
+            tabsEl.innerHTML = '<div class="drum-track"></div>';
+            var track = tabsEl.querySelector('.drum-track');
+            var itemH = 36;
+
+            headings.forEach(function(h, i) {
+              if (!h.id) h.id = 'section-' + i;
+              var btn = document.createElement('button');
+              btn.className = 'section-tab';
+              btn.textContent = h.textContent.replace(/[\s#]+$/, '').trim();
+              btn.addEventListener('click', function() {
+                contentEl.scrollTo({ top: h.offsetTop - 20, behavior: 'smooth' });
+              });
+              track.appendChild(btn);
+            });
+
+            var tabs = Array.from(track.querySelectorAll('.section-tab'));
+            var centerY = itemH * 2; // middle slot of 5
+
+            function updateDrum(activeIdx) {
+              tabs.forEach(function(tab, i) {
+                var offset = (i - activeIdx) * itemH + centerY;
+                var dist = Math.abs(i - activeIdx);
+                tab.style.transform = 'translateY(' + offset + 'px)';
+                tab.setAttribute('data-dist', Math.min(dist, 3));
+              });
+            }
+
+            // Scrollspy
+            if (scrollSpyCleanup) scrollSpyCleanup();
+            var activeIdx = 0;
+            function onScroll() {
+              var scrollTop = contentEl.scrollTop;
+              var atBottom = contentEl.scrollHeight - scrollTop - contentEl.clientHeight < 40;
+              var next = 0;
+              if (atBottom) {
+                next = headings.length - 1;
+              } else {
+                headings.forEach(function(h, i) {
+                  if (h.offsetTop - 80 <= scrollTop) next = i;
+                });
+              }
+              if (next !== activeIdx) {
+                activeIdx = next;
+                updateDrum(activeIdx);
+              }
+            }
+            updateDrum(0);
+            contentEl.addEventListener('scroll', onScroll);
+            onScroll();
+            scrollSpyCleanup = function() { contentEl.removeEventListener('scroll', onScroll); };
+          }
+
+          hook.doneEach(function() {
+            var contentEl = document.querySelector('.content');
+            var sidebar = document.querySelector('.sidebar');
+
+            // Restore sidebar scroll so it doesn't jump on navigation
+            if (sidebar) sidebar.scrollTop = savedSidebarScroll;
+
+            var idMatch = window.location.hash.match(/[?&]id=([^&]+)/);
+            if (idMatch && contentEl) {
+              var targetId = decodeURIComponent(idMatch[1]);
+              var target = document.getElementById(targetId);
+              if (target) {
+                contentEl.scrollTo({ top: target.offsetTop - 20, behavior: 'smooth' });
+                buildSectionTabs();
+                return;
+              }
+            }
+            if (contentEl) contentEl.scrollTo({ top: 0, behavior: 'smooth' });
+            buildSectionTabs();
+
+            // Pagination
+            document.querySelectorAll('.docs-pagination').forEach(function(el) { el.remove(); });
+            var hash = window.location.hash.replace(/\?.*$/, '') || '#/';
+            var idx = pages.indexOf(hash);
+            if (idx !== -1) {
+              var prev = idx > 0 ? pages[idx - 1] : null;
+              var next = idx < pages.length - 1 ? pages[idx + 1] : null;
+              var nav = document.createElement('nav');
+              nav.className = 'docs-pagination';
+              nav.innerHTML =
+                (prev ? '<a href="' + prev + '">→</a>' : '<span class="spacer"></span>') +
+                (next ? '<a href="' + next + '">←</a>' : '<span class="spacer"></span>');
+              var section = document.querySelector('.markdown-section');
+              if (section) section.appendChild(nav);
+            }
+
+            // Footer
+            document.querySelectorAll('.docs-footer').forEach(function(el) { el.remove(); });
+            var footer = document.createElement('footer');
+            footer.className = 'docs-footer';
+            footer.innerHTML =
+              '<div></div>' +
+              '<div class="docs-footer-links">' +
+              '<a href="https://clinic-flow.co.il/#/terms" target="_blank">תנאי שימוש</a>' +
+              '<a href="https://clinic-flow.co.il/#/privacy" target="_blank">מדיניות פרטיות</a>' +
+              '<a href="https://clinic-flow.co.il/#/refund" target="_blank">מדיניות החזרים</a>' +
+              '<a href="https://clinic-flow.co.il/#/disclaimer" target="_blank">הסרת אחריות</a>' +
+              '<a href="mailto:contact@clinic-flow.co.il">contact@clinic-flow.co.il</a>' +
+              '</div>' +
+              '<div class="docs-footer-copy">© 2026 ClinicFlow</div>';
+            document.body.appendChild(footer);
+
+            // Show footer only when scrolled to bottom
+            var contentEl2 = document.querySelector('.content');
+            if (contentEl2) {
+              var checkFooter = function() {
+                var atBottom = contentEl2.scrollHeight - contentEl2.scrollTop - contentEl2.clientHeight < 80;
+                footer.classList.toggle('visible', atBottom);
+              };
+              contentEl2.addEventListener('scroll', checkFooter);
+              checkFooter();
+            }
+          });
+        },
+      ],
+    };
+  </script>
+  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+</body>
+</html>

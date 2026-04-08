@@ -1,0 +1,22 @@
+- [ראשי](/)
+- [התחלה מהירה](getting-started.md)
+- [תרחישים נפוצים](scenarios.md)
+
+- **האתר**
+- [הרשמה וכניסה](website/auth.md)
+- [רכישה ושדרוג](website/billing.md)
+- [לוח הבקרה](website/dashboard.md)
+
+- **האפליקציה**
+- [התקנה והפעלה](app/installation.md)
+- [דף הבית](app/home.md)
+- [מטופלים](app/patients.md)
+- [עורך ביקור](app/visit-editor.md)
+- [יומן תורים](app/calendar.md)
+- [מסמכים](app/documents.md)
+- [ניהול כספי](app/finance.md)
+- [חוות דעת](app/opinions.md)
+- [יומן אישי ופתקים](app/journal.md)
+- [תרופות](app/medications.md)
+- [גיבוי ושחזור](app/backup-restore.md)
+- [הגדרות](app/settings.md)
