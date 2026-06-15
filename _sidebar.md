@@ -1,6 +1,7 @@
 - [ראשי](/)
 - [התחלה מהירה](getting-started.md)
 - [תרחישים נפוצים](scenarios.md)
+- [שגיאות ופתרון תקלות](errors.md)
 
 - **האתר**
 - [הרשמה וכניסה](website/auth.md)
