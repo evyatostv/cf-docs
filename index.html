@@ -396,6 +396,35 @@
       .section-tabs { display: none !important; }
       .top-bar-badge { display: none; }
     }
+
+    /* ── Image lightbox (click to fullscreen) ── */
+    .markdown-section img { cursor: zoom-in; border-radius: 10px; transition: box-shadow 0.15s; }
+    .markdown-section img:hover { box-shadow: 0 4px 22px rgba(13,71,161,0.20); }
+    #cf-lightbox {
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(16,22,32,0.93);
+      display: none; align-items: center; justify-content: center;
+      padding: 40px; opacity: 0; transition: opacity 0.2s;
+    }
+    #cf-lightbox.open { display: flex; opacity: 1; }
+    #cf-lightbox img {
+      max-width: 95vw; max-height: 92vh; object-fit: contain;
+      border-radius: 10px; box-shadow: 0 16px 56px rgba(0,0,0,0.55);
+      cursor: zoom-out;
+    }
+    #cf-lightbox .cf-lb-close {
+      position: fixed; top: 16px; left: 16px;
+      width: 44px; height: 44px; border-radius: 50%;
+      border: none; cursor: pointer;
+      background: rgba(255,255,255,0.14); color: #fff;
+      font-size: 26px; line-height: 1; display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s;
+    }
+    #cf-lightbox .cf-lb-close:hover { background: rgba(255,255,255,0.28); }
+    #cf-lightbox .cf-lb-hint {
+      position: fixed; bottom: 18px; left: 0; right: 0; text-align: center;
+      color: rgba(255,255,255,0.6); font-size: 0.8rem; pointer-events: none;
+    }
   </style>
 </head>
 <body>
@@ -614,5 +643,44 @@
   </script>
   <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+  <script>
+    // Click any documentation image to view it fullscreen (lightbox).
+    (function () {
+      var lb, lbImg;
+      function build() {
+        if (lb) return;
+        lb = document.createElement('div');
+        lb.id = 'cf-lightbox';
+        lb.innerHTML =
+          '<button class="cf-lb-close" aria-label="סגור">×</button>' +
+          '<img alt="" />' +
+          '<div class="cf-lb-hint">לחצו במקום כלשהו או הקישו Esc לסגירה</div>';
+        document.body.appendChild(lb);
+        lbImg = lb.querySelector('img');
+        lb.addEventListener('click', close);
+        lbImg.addEventListener('click', function (e) { e.stopPropagation(); close(); });
+      }
+      function open(src, alt) {
+        build();
+        lbImg.src = src;
+        lbImg.alt = alt || '';
+        lb.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+      function close() {
+        if (!lb) return;
+        lb.classList.remove('open');
+        document.body.style.overflow = '';
+        setTimeout(function () { if (lbImg) lbImg.src = ''; }, 200);
+      }
+      document.addEventListener('click', function (e) {
+        var img = e.target.closest && e.target.closest('.markdown-section img');
+        if (img) { e.preventDefault(); open(img.currentSrc || img.src, img.alt); }
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') close();
+      });
+    })();
+  </script>
 </body>
 </html>
