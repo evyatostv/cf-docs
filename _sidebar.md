@@ -1,7 +1,10 @@
 - [ראשי](/)
 - [התחלה מהירה](getting-started.md)
+- [מדריך הפיצ'רים המלא](features-guide.md)
 - [תרחישים נפוצים](scenarios.md)
 - [שגיאות ופתרון תקלות](errors.md)
+- [שגיאות בחשבון ובתשלום](errors-account.md)
+- [סיסמאות וקודים — מה ניתן לשחזר](passwords.md)
 
 - **האתר**
 - [הרשמה וכניסה](website/auth.md)

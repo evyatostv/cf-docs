@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ClinicFlow docs is a Docsify single-page app that uses hash-based routing
+  (e.g. /#/errors), so every page is served from the same index.html.
+  Search engines strip the #-fragment, therefore the only crawlable URL is
+  the site root. Content pages are discoverable from the in-app sidebar.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://docs.clinic-flow.co.il/</loc>
+    <lastmod>2026-07-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>
