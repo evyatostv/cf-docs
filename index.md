@@ -38,6 +38,7 @@
 *   [יומן אישי ופתקים (Journal)](app/journal.md)
 *   [ניהול תרופות](app/medications.md)
 *   [גיבוי ושחזור](app/backup-restore.md)
+*   [עבודה בבית ובמרפאה והעברת גיבוי ב־USB](/app/usb-transfer.md)
 *   [הגדרות המערכת](app/settings.md)
 
 ---
